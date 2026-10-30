@@ -7,8 +7,9 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
-"strconv"
+
 	"github.com/go-chi/chi"
 	"github.com/go-chi/cors"
 	"github.com/joho/godotenv"
@@ -35,10 +36,10 @@ func main() {
 	if port == "" {
 		log.Fatal("PORT environment variable is not set")
 	}
-portNumber, err := strconv.Atoi(port)
-if err != nil || portNumber < 1 || portNumber > 65535 {
-	log.Fatal("PORT must be a number between 1 and 65535")
-}
+	portNumber, err := strconv.Atoi(port)
+	if err != nil || portNumber < 1 || portNumber > 65535 {
+		log.Fatal("PORT must be a number between 1 and 65535")
+	}
 
 	apiCfg := apiConfig{}
 
@@ -94,11 +95,11 @@ if err != nil || portNumber < 1 || portNumber > 65535 {
 
 	router.Mount("/v1", v1Router)
 	srv := &http.Server{
-		Addr:    ":" + port,
-		Handler: router,
+		Addr:              ":" + port,
+		Handler:           router,
 		ReadHeaderTimeout: 60 * time.Second,
 	}
 
-	log.Printf("Serving on port: %q", portNumber)
+	log.Printf("Serving on port: %d", portNumber)
 	log.Fatal(srv.ListenAndServe())
 }
